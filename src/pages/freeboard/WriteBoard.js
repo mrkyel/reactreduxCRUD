@@ -1,65 +1,53 @@
 import Axios from "axios";
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useState } from "react";
 import { Col, Form, Jumbotron, Row, Button } from "react-bootstrap";
 import converDt from "../../util/CommonUtils";
 
-const PageDt = ({ match }) => {
-  const [data, setData] = useState([]);
-  const { board_id } = match.params;
-
+const WriteBoard = () => {
   const [contents, setContents] = useState({
+    regDt: converDt(new Date(), "yyyy-MM-DD HH:mm:ss"),
     updatedt: converDt(new Date(), "yyyy-MM-DD HH:mm:ss"),
   });
 
-  const getBoards = useCallback(async () => {
-    const res = await Axios.get(`http://localhost:8080/v1/board/${board_id}`);
-    setData(res.data);
-  }, [board_id]);
-
-  useEffect(() => {
-    getBoards();
-  }, [getBoards]);
-
   const onChagne = (e) => {
     setContents({
-      ...data,
+      ...contents,
       [e.target.name]: e.target.value,
     });
     console.log(contents);
   };
 
   const onSave = () => {
-    Axios.post(`http://localhost:8080/v1/board/save/`, contents).then((res) => {
-      getBoards();
-    });
-  };
-
-  const onDelete = () => {
-    Axios.delete(`http://localhost:8080/v1/board/delete/${board_id}`, contents);
+    Axios.post(`http://localhost:8080/v1/board/insert/`, contents);
     window.location.replace(`/freeboard`);
   };
 
   return (
     <>
       <Jumbotron>
-        <h1>게시글 상세</h1>
-        <div>{board_id}의 상세페이지 입니다.</div>
+        <h1>게시글 작성</h1>
       </Jumbotron>
       <Form style={{ textAlign: "center" }}>
         <Form.Group as={Row} controlId="formPlaintextEmail">
           <Form.Label column sm="2">
             게시글 번호
           </Form.Label>
-          <Col sm="10">
-            <Form.Control plaintext readOnly value={data.board_id || ""} />
+          <Col sm="5">
+            <Form.Control plaintext readOnly value={""} />
           </Col>
         </Form.Group>
         <Form.Group as={Row} controlId="formPlaintextEmail">
           <Form.Label column sm="2">
             작성자
           </Form.Label>
-          <Col sm="10">
-            <Form.Control plaintext readOnly value={data.user_id || ""} />
+          <Col sm="5">
+            <Form.Control
+              type="text"
+              name="user_id"
+              onChange={onChagne}
+              defaultValue={""}
+              autoComplete="off"
+            />
           </Col>
         </Form.Group>
         <Form.Group as={Row} controlId="formPlaintextPassword">
@@ -71,7 +59,7 @@ const PageDt = ({ match }) => {
               type="text"
               name="title"
               onChange={onChagne}
-              defaultValue={data.title}
+              defaultValue={""}
               autoComplete="off"
             />
           </Col>
@@ -86,7 +74,7 @@ const PageDt = ({ match }) => {
               name="context"
               rows={3}
               onChange={onChagne}
-              defaultValue={data.context}
+              defaultValue={""}
               autoComplete="off"
             />
           </Col>
@@ -96,7 +84,7 @@ const PageDt = ({ match }) => {
             게시일
           </Form.Label>
           <Col sm="2">
-            <Form.Control plaintext readOnly defaultValue={data.regDt || ""} />
+            <Form.Control plaintext readOnly defaultValue={""} />
           </Col>
         </Form.Group>
         <Form.Group as={Row} controlId="formPlaintextPassword">
@@ -104,19 +92,12 @@ const PageDt = ({ match }) => {
             최종 수정날짜
           </Form.Label>
           <Col sm="2">
-            <Form.Control
-              plaintext
-              readOnly
-              defaultValue={data.updatedt || ""}
-            />
+            <Form.Control plaintext readOnly defaultValue={""} />
           </Col>
         </Form.Group>
         <Row className="justify-content-md-center">
           <Button variant="primary" onClick={onSave}>
             저장
-          </Button>{" "}
-          <Button variant="danger" onClick={onDelete}>
-            삭제
           </Button>{" "}
         </Row>
       </Form>
@@ -124,4 +105,4 @@ const PageDt = ({ match }) => {
   );
 };
 
-export default PageDt;
+export default WriteBoard;

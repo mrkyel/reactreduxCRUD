@@ -9,7 +9,7 @@ const Pagenation = ({ perPage, totalPosts, paginate, currentPage }) => {
 
   return (
     <nav>
-      <ul className="pagination">
+      <ul className="pagination" style={{ placeContent: "center" }}>
         <li
           className="page-link"
           onClick={() => paginate(pageNumbers[0])}
@@ -19,7 +19,11 @@ const Pagenation = ({ perPage, totalPosts, paginate, currentPage }) => {
         </li>
         <li
           className="page-link"
-          onClick={() => paginate(currentPage - 1)}
+          onClick={() =>
+            paginate(
+              currentPage === pageNumbers[0] ? currentPage : currentPage - 1
+            )
+          }
           style={{ cursor: "pointer" }}
         >
           {"<"}
@@ -36,7 +40,13 @@ const Pagenation = ({ perPage, totalPosts, paginate, currentPage }) => {
         ))}
         <li
           className="page-link"
-          onClick={() => paginate(currentPage + 1)}
+          onClick={() =>
+            paginate(
+              currentPage === pageNumbers[pageNumbers.length - 1]
+                ? currentPage
+                : currentPage + 1
+            )
+          }
           style={{ cursor: "pointer" }}
         >
           {">"}

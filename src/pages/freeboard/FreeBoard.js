@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Container, Table } from "react-bootstrap";
+import { Container, Table, Button } from "react-bootstrap";
 import Pagination from "../../component/Pagenation";
 
 const FreeBoard = ({ history }) => {
   const [data, setData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [perPage] = useState(3);
+  const [perPage] = useState(5);
 
   const totalPosts = data.length;
 
@@ -29,6 +29,11 @@ const FreeBoard = ({ history }) => {
   //상세 페이지 이동
   const pageDt = (param) => {
     history.push(`/freeboard/${param.board_id}`);
+  };
+
+  //글쓰기
+  const onWrite = () => {
+    history.push("/writeboard");
   };
 
   if (totalPosts === 0) {
@@ -71,6 +76,9 @@ const FreeBoard = ({ history }) => {
         paginate={paginate}
         currentPage={currentPage}
       />
+      <Button variant="primary" onClick={onWrite} style={{ float: "right" }}>
+        글쓰기
+      </Button>{" "}
     </Container>
   );
 };
