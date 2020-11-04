@@ -1,5 +1,6 @@
 import Axios from "axios";
 import React, { useState } from "react";
+import { useRef } from "react";
 import { Col, Form, Jumbotron, Row, Button } from "react-bootstrap";
 import converDt from "../../util/CommonUtils";
 
@@ -8,6 +9,9 @@ const WriteBoard = () => {
     regDt: converDt(new Date(), "yyyy-MM-DD HH:mm:ss"),
     updatedt: converDt(new Date(), "yyyy-MM-DD HH:mm:ss"),
   });
+  const WriterInputEl = useRef(null);
+  const TitleInputEl = useRef(null);
+  const ContentsInputEl = useRef(null);
 
   const onChagne = (e) => {
     setContents({
@@ -18,6 +22,25 @@ const WriteBoard = () => {
   };
 
   const onSave = () => {
+    if (
+      WriterInputEl.current.value === "" ||
+      WriterInputEl.current.value === null
+    ) {
+      WriterInputEl.current.focus();
+      return;
+    } else if (
+      TitleInputEl.current.value === "" ||
+      TitleInputEl.current.value === null
+    ) {
+      TitleInputEl.current.focus();
+      return;
+    } else if (
+      ContentsInputEl.current.value === "" ||
+      ContentsInputEl.current.value === null
+    ) {
+      ContentsInputEl.current.focus();
+      return;
+    }
     Axios.post(`http://localhost:8080/v1/board/insert/`, contents);
     window.location.replace(`/freeboard`);
   };
@@ -47,6 +70,7 @@ const WriteBoard = () => {
               onChange={onChagne}
               defaultValue={""}
               autoComplete="off"
+              ref={WriterInputEl}
             />
           </Col>
         </Form.Group>
@@ -61,6 +85,7 @@ const WriteBoard = () => {
               onChange={onChagne}
               defaultValue={""}
               autoComplete="off"
+              ref={TitleInputEl}
             />
           </Col>
         </Form.Group>
@@ -76,6 +101,7 @@ const WriteBoard = () => {
               onChange={onChagne}
               defaultValue={""}
               autoComplete="off"
+              ref={ContentsInputEl}
             />
           </Col>
         </Form.Group>
