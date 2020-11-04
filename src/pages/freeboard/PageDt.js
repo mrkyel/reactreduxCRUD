@@ -11,13 +11,14 @@ const PageDt = ({ match }) => {
     updatedt: converDt(new Date(), "yyyy-MM-DD HH:mm:ss"),
   });
 
-  const getBoards = useCallback(async () => {
+  const getBoards = async () => {
     const res = await Axios.get(`http://localhost:8080/v1/board/${board_id}`);
     setData(res.data);
-  }, [board_id]);
+  };
 
   useEffect(() => {
     getBoards();
+    console.log(data);
   }, [getBoards]);
 
   const onChagne = (e) => {
